@@ -19,14 +19,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 // connecting blog to my databse
-mongoose.connect('mongodb://localhost:27017/blogsDB', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect('mongodb://localhost:27017/blogDB', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 // creating shema
-const blogsSchema = {
+const postSchema = {
   title : String,
   body: String
 }
 // creating model
-const Blog = mongoose.model("Blog", blogsSchema);
+const Blog = mongoose.model("Blog", postSchema);
 
 const blog1 = new Blog({
     title: "Day1",
@@ -36,11 +36,25 @@ const blog2 = new Blog({
   title: "Day2",
   body: "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui."
 });
-//blog1.save();
+// blog1.save();
 // blog2.save();
-const initialBlogs = [blog1, blog2]
+// const initialBlogs = [blog1, blog2]
 app.get("/", (req, res) =>{
-    res.render("home", {homeStartingContent: homeStartingContent, initialBlogs: initialBlogs})
+  Blog.find({}, (err, posts) =>{
+    console.log(posts)
+    res.render("home", {homeStartingContent: homeStartingContent, posts: posts})
+  })
+
+    // Post.find({}, function(err, posts){
+
+    //   res.render("home", {
+   
+    //     startingContent: homeStartingContent,
+   
+    //     posts: posts
+   
+    //     });
+  
 });
 
 app.get("/about", (req, res) =>{
@@ -60,10 +74,32 @@ app.post("/compose", (req, res) =>{
   let newBlog = new Blog({
       title: req.body.postTitle,
       body: req.body.postBody
-  })
-  // newBlog.save()
-  initialBlogs.push(newBlog);
+  });
+
+  newBlog.save()
   res.redirect("/")
+  // blogPosts.push(newBlog);
+  // Blog.insertMany(blogPosts, (err)=>{
+  //   res.render("home", {homeStartingContent: homeStartingContent,  blogPosts: blogPosts})
+  // })
+      
+  
+
+
+
+  // if(initialBlogs.includes(newBlog)){
+  //   res.send("This blog alredy exist")
+  // }else{
+  //   newBlog.save()
+  //   blogPosts.push(newBlog);
+  //   Blog.insertMany(blogPosts, (err)=>{
+  //     if(!err){
+  //       console.log("Post successfully added to the database")
+  //       res.redirect("/")
+  //     }
+  //   })
+  // }
+  
 });
 
 // app.get("/posts/:postName", (req, res) =>{
