@@ -41,19 +41,9 @@ const blog2 = new Blog({
 // const initialBlogs = [blog1, blog2]
 app.get("/", (req, res) =>{
   Blog.find({}, (err, posts) =>{
-    console.log(posts)
+    // console.log(posts)
     res.render("home", {homeStartingContent: homeStartingContent, posts: posts})
   })
-
-    // Post.find({}, function(err, posts){
-
-    //   res.render("home", {
-   
-    //     startingContent: homeStartingContent,
-   
-    //     posts: posts
-   
-    //     });
   
 });
 
@@ -75,47 +65,32 @@ app.post("/compose", (req, res) =>{
       title: req.body.postTitle,
       body: req.body.postBody
   });
-
-  newBlog.save()
-  res.redirect("/")
-  // blogPosts.push(newBlog);
-  // Blog.insertMany(blogPosts, (err)=>{
-  //   res.render("home", {homeStartingContent: homeStartingContent,  blogPosts: blogPosts})
-  // })
-      
-  
-
-
-
-  // if(initialBlogs.includes(newBlog)){
-  //   res.send("This blog alredy exist")
-  // }else{
-  //   newBlog.save()
-  //   blogPosts.push(newBlog);
-  //   Blog.insertMany(blogPosts, (err)=>{
-  //     if(!err){
-  //       console.log("Post successfully added to the database")
-  //       res.redirect("/")
-  //     }
-  //   })
-  // }
+  // blogPosts.push(newBlog)
+  newBlog.save((err)=>{
+    if(!err){
+      res.redirect("/")
+    }
+  })
   
 });
 
-// app.get("/posts/:postName", (req, res) =>{
-//   let requestTitle = _.lowerCase(req.params.postName);
-//   posts.forEach((post) =>{
-//     let storeTitle = _.lowerCase(post.title)
-//    if(storeTitle === requestTitle){
-//      res.render("post",
-//       {
-//         title: post.title,
-//         content: post.content
-//       })
-//    }
-//   })
+app.get("/posts/:postId", (req, res) =>{
+  let requestedPostId = req.params.postId;
+  // console.log(req)
+  // console.log(requestId)
+  Blog.findOne({_id: requestedPostId}, function(err, post){
+    if(!err){
+      res.render("post", 
+      {
+        title: post.title,
+        content: post.body
+      })
+    }
+   })
+  console.log(blogPosts)
   
-// })
+  
+})
 
 
 
