@@ -59,12 +59,11 @@ app.get("/compose", (req, res) =>{
 });
 
 app.post("/compose", (req, res) =>{
-  // console.log(req.body)
   let newBlog = new Blog({
       title: req.body.postTitle,
       body: req.body.postBody
   });
-  // blogPosts.push(newBlog)
+  
   newBlog.save((err)=>{
     if(!err){
       res.redirect("/")
