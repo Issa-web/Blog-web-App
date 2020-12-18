@@ -1,3 +1,3 @@
 # Blog-web-site
 
-![TechnicalBlog App Demo](technicalBlog.gif) 
+![technicalBlog App Demo](technicalBlog.gif) 
