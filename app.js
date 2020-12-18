@@ -1,4 +1,3 @@
-//jshint esversion:6
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -41,7 +40,7 @@ const blog2 = new Blog({
 // const initialBlogs = [blog1, blog2]
 app.get("/", (req, res) =>{
   Blog.find({}, (err, posts) =>{
-    // console.log(posts)
+    
     res.render("home", {homeStartingContent: homeStartingContent, posts: posts})
   })
   
@@ -76,8 +75,6 @@ app.post("/compose", (req, res) =>{
 
 app.get("/posts/:postId", (req, res) =>{
   let requestedPostId = req.params.postId;
-  // console.log(req)
-  // console.log(requestId)
   Blog.findOne({_id: requestedPostId}, function(err, post){
     if(!err){
       res.render("post", 
